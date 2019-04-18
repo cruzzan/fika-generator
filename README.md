@@ -13,3 +13,9 @@ The application will try to make the schedule as "fair"&#8482; as possible.
 ```bash
 go run ./cmd/fika-generator/main.go
 ```
+
+### Build the app: 
+
+```bash
+go build -o bin/fika-generator cmd/fika-generator/main.go
+```
