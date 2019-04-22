@@ -30,8 +30,7 @@ func main() {
 	for i := 0; i < s.RotationCount; i++ {
 
 		possibleMembers := narrowChoices(s, *names)
-		rotation := Rotation{}
-		fmt.Println(possibleMembers)
+		rotation := NewRotation()
 
 		for j := 0; j < s.RotationSize; j++ {
 			// Seed the rand generator
@@ -44,7 +43,6 @@ func main() {
 
 			//Remove the newly added member from possible members
 			possibleMembers = append(possibleMembers[:pos], possibleMembers[pos+1:]...)
-			fmt.Println(possibleMembers)
 		}
 
 		s.Rotations = append(s.Rotations, rotation)
