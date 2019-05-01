@@ -11,7 +11,7 @@ The application will try to make the schedule as "fair"&#8482; as possible.
 ### Running the app from source: 
 
 ```bash
-go run ./cmd/fika-generator/main.go
+go run ./cmd/fika-generator/main.go --help
 ```
 
 ### Build the app: 
