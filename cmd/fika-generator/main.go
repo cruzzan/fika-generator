@@ -5,9 +5,7 @@ import (
 	"github.com/alecthomas/kingpin"
 	. "github.com/cruzzan/fika-generator/src/pkg/Rotation"
 	. "github.com/cruzzan/fika-generator/src/pkg/Schedule"
-	"math/rand"
 	"os"
-	"time"
 )
 
 var (
@@ -24,25 +22,22 @@ func main() {
 	rc := checkAndDefaultRotations(*rotations)
 	ts := checkAndDefaultTeamSize(*teamSize)
 
-	s := NewSchedule(rc, ts, len(*names))
+	s := NewSchedule(rc, ts)
 
+	workingList := make([]string, 0)
 	// Create rotation
 	for i := 0; i < s.RotationCount; i++ {
-
-		possibleMembers := narrowChoices(s, *names)
 		rotation := NewRotation()
 
 		for j := 0; j < s.RotationSize; j++ {
-			// Seed the rand generator
-			src := rand.NewSource(time.Now().UnixNano())
-			rnd := rand.New(src)
+			// Refill the working list of names if it's empty
+			if len(workingList) < s.RotationSize {
+				for _, n := range *names{
+					workingList = append(workingList, n)
+				}
+			}
 
-			pos := rnd.Intn(len(possibleMembers))
-
-			rotation.Members = append(rotation.Members, possibleMembers[pos])
-
-			//Remove the newly added member from possible members
-			possibleMembers = append(possibleMembers[:pos], possibleMembers[pos+1:]...)
+			workingList = rotation.AddMember(workingList)
 		}
 
 		s.Rotations = append(s.Rotations, rotation)
@@ -68,13 +63,4 @@ func checkAndDefaultTeamSize(ts int) int {
 	}
 
 	return ts
-}
-
-func narrowChoices(s Schedule, n []string) []string {
-	s = Schedule{}
-	var names = make([]string, 0)
-	for _, name := range n {
-		names = append(names, name)
-	}
-	return names
 }
